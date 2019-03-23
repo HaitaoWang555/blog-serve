@@ -1,0 +1,65 @@
+{
+  "name": "blog-serve",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "egg": {
+    "declarations": true
+  },
+  "apidoc": {
+    "name": "blog-serve API",
+    "version": "0.1.0",
+    "description": "blog-serve API",
+    "title": "blog-serve API",
+    "url": "http://127.0.0.1/v1"
+  },
+  "dependencies": {
+    "egg": "^2.15.1",
+    "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^4.3.1",
+    "lodash": "^4.17.11",
+    "pg": "^7.8.1",
+    "pg-hstore": "^2.3.2",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.7",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.11.0",
+    "egg-ci": "^1.11.0",
+    "egg-mock": "^3.21.0",
+    "eslint": "^5.13.0",
+    "eslint-config-egg": "^7.1.0",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-blog-serve",
+    "stop": "egg-scripts stop --title=egg-server-blog-serve",
+    "dev": "egg-bin dev",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod",
+    "docs": "apidoc -i ./app/ -o docs/"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "main": ".autod.conf.js",
+  "directories": {
+    "test": "test"
+  }
+}
