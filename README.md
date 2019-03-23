@@ -5,6 +5,7 @@
 <!-- add docs here for user -->
 
 see [egg docs][egg] for more detail.
+see [API docs](https://haitaowang555.github.io/blog-serve/).
 
 ### Development
 

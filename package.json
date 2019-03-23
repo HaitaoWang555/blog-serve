@@ -11,7 +11,7 @@
     "version": "0.1.0",
     "description": "blog-serve API",
     "title": "blog-serve API",
-    "url": "http://127.0.0.1/v1"
+    "url": "https://haitaowang555.github.io/blog-serve/"
   },
   "dependencies": {
     "egg": "^2.15.1",
