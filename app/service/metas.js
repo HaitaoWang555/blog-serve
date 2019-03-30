@@ -21,9 +21,9 @@ class MetasService extends Service {
    */
   async list(type) {
 
-    const products = await this.MetasModel.list(type);
+    const list = await this.MetasModel.list(type);
 
-    return products;
+    return list;
   }
 
   /**
