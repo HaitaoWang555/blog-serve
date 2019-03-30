@@ -59,7 +59,7 @@ module.exports = app => {
 
   articles.removeOneById = async id => {
     const item = await articles.getOneById(id);
-    if (!item) return null;
+    if (!item) return '1';
     return item.destroy();
   };
 

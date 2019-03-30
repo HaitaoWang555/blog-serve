@@ -10,5 +10,7 @@ module.exports = app => {
   require('./router/test')(app);
   require('./router/backend/metas')(app);
   require('./router/portal/metas')(app);
+  require('./router/backend/articles')(app);
+  require('./router/portal/articles')(app);
 
 };
