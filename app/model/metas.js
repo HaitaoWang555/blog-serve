@@ -21,7 +21,15 @@ module.exports = app => {
       });
     });
 
-  metas.list = async () => {
+  metas.list = async type => {
+    if (type) {
+      return await metas
+        .findAll({
+          where: {
+            type,
+          },
+        });
+    }
     return await metas
       .findAll();
   };
@@ -54,7 +62,7 @@ module.exports = app => {
 
   metas.removeOneById = async id => {
     const item = await metas.getOneById(id);
-    if (!item) return null;
+    if (!item) return '1';
     return item.destroy();
   };
 
