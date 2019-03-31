@@ -1,7 +1,10 @@
 'use strict';
 
 // 文章 Model
-
+/* eslint valid-jsdoc: "off" */
+/**
+ * @param {Egg.Application} app - egg application
+ */
 module.exports = app => {
 
   const { UUID, STRING, BOOLEAN, TEXT } = app.Sequelize;
@@ -23,7 +26,9 @@ module.exports = app => {
       });
     });
 
-  articles.list = async (limit, offset) => {
+  articles.list = async (page, pagesize) => {
+    const limit = pagesize;
+    const offset = (page - 1) * pagesize;
     return await articles
       .findAll({
         limit,

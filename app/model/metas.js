@@ -1,6 +1,10 @@
 'use strict';
 
 // 属性(分类和标签) Model
+/* eslint valid-jsdoc: "off" */
+/**
+ * @param {Egg.Application} app - egg application
+ */
 
 module.exports = app => {
 
