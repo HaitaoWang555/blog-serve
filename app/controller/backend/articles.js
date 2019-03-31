@@ -73,20 +73,6 @@ class ArticlesController extends Controller {
   async update() {
     const { ctx } = this;
     const params = ctx.request.body;
-    const { title, content, status } = params;
-    if (!title) {
-      const response = this.ServerResponse.createByErrorMsg('请输入文章标题');
-      ctx.body = response;
-      return null;
-    } else if (!content) {
-      const response = this.ServerResponse.createByErrorMsg('文章内容不能为空');
-      ctx.body = response;
-      return null;
-    } else if (!status) {
-      const response = this.ServerResponse.createByErrorMsg('请选择文章状态');
-      ctx.body = response;
-      return null;
-    }
     const update = await this.ArticlesService.update(params);
     const response = update
       ? this.ServerResponse.createBySuccessMsgAndData('修改成功', update)
