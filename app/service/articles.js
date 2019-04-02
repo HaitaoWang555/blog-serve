@@ -18,9 +18,9 @@ class ArticlesService extends Service {
 
   /**
    * 获取列表数据
-   * @param {Number} pageSize 默认10条
    * @param {Number} page 默认第一页
-   * @returns {Object} 列表
+   * @param {Number} pageSize 默认10条
+   * @return {Object} 列表
    */
   async list(page, pageSize) {
     const list = await this.ArticlesModel.list(page, pageSize);
@@ -31,7 +31,7 @@ class ArticlesService extends Service {
   /**
    * 新增文章
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async addOne(params) {
 
@@ -44,7 +44,7 @@ class ArticlesService extends Service {
   /**
    * 更新分类或标签
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async update(params) {
 
@@ -60,7 +60,7 @@ class ArticlesService extends Service {
   /**
    * 根据id获取列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息 信息
+   * @return {Object} 成功或失败信息 信息
    */
   async getOneById(id) {
 
@@ -71,7 +71,7 @@ class ArticlesService extends Service {
   /**
    * 根据id删除列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息
+   * @return {Object} 成功或失败信息
    */
   async delete(id) {
 
