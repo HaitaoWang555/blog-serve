@@ -13,6 +13,7 @@ class MetasService extends Service {
   constructor(ctx) {
     super(ctx);
     this.MetasModel = ctx.model.Metas;
+    this.ArticlesModel = ctx.model.Articles;
     this.ServerResponse = ctx.response.ServerResponse;
   }
 
@@ -22,9 +23,20 @@ class MetasService extends Service {
    */
   async list(type) {
 
-    const list = await this.MetasModel.list(type);
+    let list = await this.MetasModel.list(type);
 
-    return list;
+    list = list.map(row => row && row.toJSON());
+
+    const str = type === 'TAG' ? 'tags' : 'category';
+
+    const listWithArticles = await Promise.all(list.map(async item => {
+
+      const articles = await this.ArticlesModel.getAllWithType(str, item.name)
+        .then(rows => rows && rows.map(r => r.toJSON()));
+      return { ...item, articles };
+    }));
+
+    return listWithArticles;
   }
 
   /**
