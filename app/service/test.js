@@ -16,10 +16,9 @@ class TestService extends Service {
     this.ServerResponse = ctx.response.ServerResponse;
   }
   /**
-    * 测试错误处理函数
-    * @Param {String} param 参数
-    * @returns {Object} 参数信息或无参提示
-  */
+   * 错误处理函数
+   * @param {STRING} param 参数
+   */
   async error(param) {
     return param
       ? this.ServerResponse.createBySuccessMsgAndData('成功', param)
@@ -27,9 +26,8 @@ class TestService extends Service {
   }
   /**
    * 获取列表数据
-   * @param {Number} query.limit 默认10条
-   * @param {Number} query.offset 默认第一页
-   * @returns {Object} 列表
+   * @param {Object} query page pageSize
+   * @return {Object} 列表
    */
   async list(query = { limit: 10, offset: 0 }) {
     const { limit, offset } = query;
@@ -41,7 +39,7 @@ class TestService extends Service {
    * 添加
    * @param {String} name 名
    * @param {Integer} priceInCent 价格
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async addOne(name, priceInCent) {
 
@@ -59,7 +57,7 @@ class TestService extends Service {
    * @param {uuid} id id
    * @param {String} name 名
    * @param {Integer} priceInCent 价格
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async updateOneById(id, name, priceInCent) {
 
@@ -80,7 +78,7 @@ class TestService extends Service {
   /**
    * 根据id获取列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息 信息
+   * @return {Object} 成功或失败信息 信息
    */
   async getOneById(id) {
 
@@ -91,7 +89,7 @@ class TestService extends Service {
   /**
    * 根据id删除列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息
+   * @return {Object} 成功或失败信息
    */
   async removeOneById(id) {
 

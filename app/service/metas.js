@@ -20,6 +20,7 @@ class MetasService extends Service {
 
   /**
    * 获取分类或标签
+   * @param {STRING} type TAG or CATEGORY
    */
   async list(type) {
 
@@ -37,7 +38,7 @@ class MetasService extends Service {
   /**
    * 新增分类或标签
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async addOne(params) {
 
@@ -50,7 +51,7 @@ class MetasService extends Service {
   /**
    * 更新分类或标签
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async update(params) {
 
@@ -67,7 +68,7 @@ class MetasService extends Service {
   /**
    * 根据id获取列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息 信息
+   * @return {Object} 成功或失败信息 信息
    */
   async getOneById(id) {
 
@@ -78,7 +79,7 @@ class MetasService extends Service {
   /**
    * 根据id删除列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息
+   * @return {Object} 成功或失败信息
    */
   async delete(id) {
 
