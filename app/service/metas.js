@@ -13,6 +13,8 @@ class MetasService extends Service {
   constructor(ctx) {
     super(ctx);
     this.MetasModel = ctx.model.Metas;
+    this.Op = ctx.app.Sequelize.Op;
+    this.Articles = ctx.model.Articles;
     this.ServerResponse = ctx.response.ServerResponse;
   }
 
@@ -21,9 +23,15 @@ class MetasService extends Service {
    */
   async list(type) {
 
-    const list = await this.MetasModel.list(type);
+    let list = await this.MetasModel.list(type);
+    list = list.map(row => row && row.toJSON());
+    const listWithArticles = await Promise.all(list.map(async item => {
+      let arttcles = await this.Articles.findAll({ where: { tags: { [this.Op.like]: `%${item.name}%` } } });
+      arttcles = arttcles.map(row => row && row.toJSON());
 
-    return list;
+      return { ...item, arttcles };
+    }));
+    return listWithArticles;
   }
 
   /**
