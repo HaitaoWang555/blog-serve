@@ -13,23 +13,32 @@ class MetasService extends Service {
   constructor(ctx) {
     super(ctx);
     this.MetasModel = ctx.model.Metas;
+    this.Op = ctx.app.Sequelize.Op;
+    this.Articles = ctx.model.Articles;
     this.ServerResponse = ctx.response.ServerResponse;
   }
 
   /**
    * 获取分类或标签
+   * @param {STRING} type TAG or CATEGORY
    */
   async list(type) {
 
-    const list = await this.MetasModel.list(type);
+    let list = await this.MetasModel.list(type);
+    list = list.map(row => row && row.toJSON());
+    const listWithArticles = await Promise.all(list.map(async item => {
+      let arttcles = await this.Articles.findAll({ where: { tags: { [this.Op.like]: `%${item.name}%` } } });
+      arttcles = arttcles.map(row => row && row.toJSON());
 
-    return list;
+      return { ...item, arttcles };
+    }));
+    return listWithArticles;
   }
 
   /**
    * 新增分类或标签
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async addOne(params) {
 
@@ -42,7 +51,7 @@ class MetasService extends Service {
   /**
    * 更新分类或标签
    * @param {Object} params 参数集合
-   * @returns {Object} 成功或失败信息 添加的信息
+   * @return {Object} 成功或失败信息 添加的信息
    */
   async update(params) {
 
@@ -59,7 +68,7 @@ class MetasService extends Service {
   /**
    * 根据id获取列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息 信息
+   * @return {Object} 成功或失败信息 信息
    */
   async getOneById(id) {
 
@@ -70,7 +79,7 @@ class MetasService extends Service {
   /**
    * 根据id删除列表中某一个
    * @param {uuid} id ID
-   * @returns {Object} 成功或失败信息
+   * @return {Object} 成功或失败信息
    */
   async delete(id) {
 

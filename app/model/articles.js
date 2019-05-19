@@ -7,7 +7,7 @@
  */
 module.exports = app => {
 
-  const { UUID, STRING, BOOLEAN, TEXT } = app.Sequelize;
+  const { UUID, STRING, BOOLEAN, TEXT, Op } = app.Sequelize;
 
   const articles = app.model.define('articles', {
     id: { type: UUID, primaryKey: true },
@@ -33,6 +33,14 @@ module.exports = app => {
       .findAll({
         limit,
         offset,
+      });
+  };
+
+  articles.getAllWithType = async (type, name) => {
+    return await articles
+      .findAll({
+        where: { [type]: { [Op.like]: `%${name}%` } },
+        attributes: { exclude: [ 'content' ] },
       });
   };
 
