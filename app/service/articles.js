@@ -42,7 +42,7 @@ class ArticlesService extends Service {
   }
 
   /**
-   * 更新分类或标签
+   * 更新文章
    * @param {Object} params 参数集合
    * @return {Object} 成功或失败信息 添加的信息
    */
