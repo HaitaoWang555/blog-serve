@@ -93,7 +93,6 @@ module.exports = app => {
 
   user.loginWithUnPw = async (username, password) => {
     const [ found ] = await user.findAll({
-      attributes: [ 'id', 'password', 'salt', 'role' ],
       where: {
         username: {
           [Op.eq]: username,
@@ -107,7 +106,7 @@ module.exports = app => {
 
     const { encrypted: reEncryptedPassword } = await genEncryptedPassword(password, found.salt);
 
-    if (foundPassword !== reEncryptedPassword) return null;
+    if (foundPassword !== reEncryptedPassword) return 'error-password';
     const data = found.toJSON();
     delete data.password;
     delete data.salt;

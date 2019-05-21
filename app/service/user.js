@@ -24,9 +24,13 @@ class TestService extends Service {
   async loginWithUnPw(username, password) {
     const user = await this.UserModel.loginWithUnPw(username, password); // TODO: 得到用户列表
 
-    if (!user) this.ServerResponse.createByErrorMsg('账户不存在');
-
+    if (!user) {
+      return this.ServerResponse.createByErrorMsg('账户不存在');
+    } else if (user === 'error-password') {
+      return this.ServerResponse.createByErrorMsg('密码错误');
+    }
     return this.ServerResponse.createBySuccessMsgAndData('登录成功', user);
+
   }
 
   async getUserInfo(userId) {
