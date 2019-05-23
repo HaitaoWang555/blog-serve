@@ -8,7 +8,7 @@
 
 module.exports = app => {
 
-  const { UUID, STRING } = app.Sequelize;
+  const { UUID, STRING, Op } = app.Sequelize;
 
   const metas = app.model.define('metas', {
     id: { type: UUID, primaryKey: true },
@@ -25,17 +25,20 @@ module.exports = app => {
       });
     });
 
-  metas.list = async type => {
-    if (type) {
-      return await metas
-        .findAll({
-          where: {
-            type,
-          },
-        });
-    }
+  metas.list = async query => {
+    const { pagesize, page, type, name, sortBy = 'desc' } = query;
+
+    const sequelizeQuery = {};
+    sequelizeQuery.where = {};
+
+    sequelizeQuery.order = [[ 'updated_at', sortBy ]];
+    sequelizeQuery.limit = Number(pagesize || 15);
+    sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
+    if (type) sequelizeQuery.where.type = type;
+    if (name) sequelizeQuery.where.name = { [Op.like]: `%${name}%` };
+
     return await metas
-      .findAll();
+      .findAndCount(sequelizeQuery);
   };
 
   metas.addOne = async toCreate => {
@@ -65,9 +68,10 @@ module.exports = app => {
   };
 
   metas.removeOneById = async id => {
-    const item = await metas.getOneById(id);
+    const ids = id.split(',');
+    const item = await metas.destroy({ where: { id: ids } });
     if (!item) return '1';
-    return item.destroy();
+    return item;
   };
 
   return metas;
