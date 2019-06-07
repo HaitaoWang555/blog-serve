@@ -80,7 +80,7 @@ class MetasService extends Service {
 
     const update = data
       ? _.pickBy(data.toJSON(), (value, key) => {
-        return [ 'id', 'name', 'type' ].find(item => key === item);
+        return [ 'id', 'name', 'type', 'textColor', 'color' ].find(item => key === item);
       })
       : null;
 
