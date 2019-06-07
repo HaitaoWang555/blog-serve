@@ -19,15 +19,34 @@ class MetasService extends Service {
 
   /**
    * 获取分类或标签
-   * @param {STRING} type TAG or CATEGORY
+   * @param {Object} query.type TAG or CATEGORY
+   * @param {Object} query.pagesize
+   * @param {Object} query.page
    */
-  async list(type) {
+  async list(query) {
+
+    const { count, rows } = await this.MetasModel.list(query);
+    const list = rows.map(row => row && row.toJSON());
+
+    const data = {
+      items: list,
+      total: count,
+    };
+    return data;
+  }
+  /**
+   * 获取分类或标签 及文章
+   * @param {Object} query.type TAG or CATEGORY
+   * @param {Object} query.pagesize
+   * @param {Object} query.page
+   */
+  async listWithArticles(type) {
 
     let list = await this.MetasModel.list(type);
     list = list.map(row => row && row.toJSON());
     console.time();
     const listWithArticles = await Promise.all(list.map(async item => {
-      const type = this.getType(item.type);
+      const type = item.type;
       let arttcles = await this.Articles.getAllWithType(type, item.name);
       arttcles = arttcles.map(row => row && row.toJSON());
 
@@ -61,7 +80,7 @@ class MetasService extends Service {
 
     const update = data
       ? _.pickBy(data.toJSON(), (value, key) => {
-        return [ 'id', 'name', 'type' ].find(item => key === item);
+        return [ 'id', 'name', 'type', 'textColor', 'color' ].find(item => key === item);
       })
       : null;
 
@@ -87,13 +106,7 @@ class MetasService extends Service {
 
     return await this.MetasModel.removeOneById(id);
   }
-  getType(type) {
-    const obj = {
-      TAG: 'tags',
-      CATEGORY: 'category',
-    };
-    return obj[type];
-  }
+
 }
 
 module.exports = MetasService;

@@ -8,6 +8,7 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   require('./router/test')(app);
+  require('./router/backend/user')(app);
   require('./router/backend/metas')(app);
   require('./router/portal/metas')(app);
   require('./router/backend/articles')(app);

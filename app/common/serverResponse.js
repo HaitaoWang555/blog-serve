@@ -5,7 +5,7 @@ const { SUCCESS, ERROR } = require('./responseCode');
 module.exports = class ServerResponse {
   constructor(statusCode, msg, data) {
     this.statusCode = statusCode;
-    this.msg = msg;
+    this.message = msg;
     this.data = data;
   }
 
@@ -22,7 +22,7 @@ module.exports = class ServerResponse {
   }
 
   getMsg() {
-    return this.msg;
+    return this.message;
   }
 
   static createBySuccess() {

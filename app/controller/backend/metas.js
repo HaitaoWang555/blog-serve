@@ -19,8 +19,8 @@ class MetasController extends Controller {
    */
   async list() {
     const { ctx } = this;
-    const { type } = ctx.params;
-    const list = await this.MetasService.list(type);
+    const { query } = ctx;
+    const list = await this.MetasService.list(query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }

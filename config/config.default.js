@@ -34,6 +34,22 @@ module.exports = appInfo => {
     operatorsAliases: Sequelize.Op,
     timezone: '+08:00', // 东八时区
   };
+  config.redis = {
+    client: {
+      port: 6379, // Redis port
+      host: '127.0.0.1', // Redis host
+      password: '',
+      db: 0,
+    },
+    agent: true,
+  };
+
+  config.sessionRedis = {
+    key: 'EGG_SESSION',
+    maxAge: 24 * 3600 * 1000,
+    httpOnly: true,
+    encrypt: false,
+  };
   // error config
   config.onerror = {
     json(err, ctx) {
