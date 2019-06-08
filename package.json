@@ -14,6 +14,7 @@
     "url": "https://haitaowang555.github.io/blog-serve/"
   },
   "dependencies": {
+    "await-stream-ready": "^1.0.1",
     "egg": "^2.15.1",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^4.3.1",

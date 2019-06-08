@@ -22,4 +22,6 @@ module.exports = app => {
   router.delete('/manage/article/delete',
     checkLogin, controller.backend.articles.delete);
 
+  router.post('/manage/upload', checkLogin, controller.home.upload); // 上传图片
+
 };

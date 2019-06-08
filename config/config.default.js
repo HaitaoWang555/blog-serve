@@ -2,6 +2,8 @@
 
 'use strict';
 const Sequelize = require('sequelize');
+const path = require('path');
+
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -66,6 +68,17 @@ module.exports = appInfo => {
       ctx.body = `<h3 style="color: red;">${err.original}</h3>`;
       ctx.code = code;
     },
+  };
+  config.cluster = {
+    listen: {
+      port: 7001,
+      hostname: '127.0.0.1',
+    },
+  };
+  const baseUrl = 'http://' + config.cluster.listen.hostname + ':' + config.cluster.listen.port; // http://127.0.0.1:7001/
+  config.uploadArticle = {
+    path: path.join(__dirname, '../app/public/upload/article'),
+    url: baseUrl + '/public/upload/article/',
   };
 
   // add your user config here

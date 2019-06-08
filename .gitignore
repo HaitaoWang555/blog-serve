@@ -8,6 +8,8 @@ coverage/
 .idea/
 .vscode/
 run/
+app/public/upload/article/*.png
+app/public/upload/article/*.jpg
 .DS_Store
 *.sw*
 *.un~
