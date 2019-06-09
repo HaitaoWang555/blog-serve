@@ -38,7 +38,7 @@ module.exports = app => {
     if (name) sequelizeQuery.where.name = { [Op.like]: `%${name}%` };
 
     return await metas
-      .findAndCount(sequelizeQuery);
+      .findAndCountAll(sequelizeQuery);
   };
 
   metas.addOne = async toCreate => {

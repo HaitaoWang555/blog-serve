@@ -23,8 +23,12 @@ class ArticlesService extends Service {
    * @return {Object} 列表
    */
   async list(query) {
-    const { count, rows } = await this.ArticlesModel.list(query);
-    const list = rows.map(row => row && row.toJSON());
+    const { count, rows } = await this.ArticlesModel.list('portal', query);
+    const list = rows.map(row => {
+      const item = row && row.toJSON();
+      item.content = this.getSummary(item.content);
+      return item;
+    });
 
     const data = {
       items: list,
@@ -85,6 +89,15 @@ class ArticlesService extends Service {
   async delete(id) {
 
     return await this.ArticlesModel.removeOneById(id);
+  }
+  /**
+   * 获取文章预览
+   *
+   * @return 截取的预览字符串
+   */
+  getSummary(content) {
+    if (!content) return null;
+    return content; // TODO
   }
 }
 

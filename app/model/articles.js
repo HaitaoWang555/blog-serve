@@ -14,7 +14,7 @@ module.exports = app => {
     title: { type: STRING(64), allowNull: false },
     content: { type: TEXT, allowNull: false },
     tags: { type: ARRAY(app.Sequelize.STRING) },
-    category: { type: ARRAY(app.Sequelize.STRING) },
+    category: { type: STRING(64) },
     status: { type: STRING, allowNull: false },
     allow_comment: { type: BOOLEAN, allowNull: false, defaultValue: true },
   });
@@ -26,13 +26,13 @@ module.exports = app => {
       });
     });
 
-  articles.list = async query => {
+  articles.list = async (type, query) => {
     const { pagesize, page, sortBy = 'desc', title, status, tags, category } = query;
 
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
 
-    sequelizeQuery.attributes = { exclude: [ 'content' ] };
+    if (type !== 'portal') sequelizeQuery.attributes = { exclude: [ 'content' ] };
     sequelizeQuery.order = [[ 'updated_at', sortBy ]];
     sequelizeQuery.limit = Number(pagesize || 15);
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
@@ -40,10 +40,9 @@ module.exports = app => {
     if (title) sequelizeQuery.where.title = { [Op.like]: `%${title}%` };
     if (status) sequelizeQuery.where.status = status;
     if (tags) sequelizeQuery.where.tags = { [Op.contains]: tags.split(',') };
-    if (category) sequelizeQuery.where.category = { [Op.contains]: category.split(',') };
-
+    if (category) sequelizeQuery.where.category = { [Op.like]: `%${category}%` };
     return await articles
-      .findAndCount(sequelizeQuery);
+      .findAndCountAll(sequelizeQuery);
   };
 
   articles.getAllWithType = async (type, name) => {
