@@ -47,7 +47,7 @@ class ArticlesService extends Service {
 
     params.id = uuid();
     params.tags = params.tags ? params.tags.split(',') : null;
-    params.category = params.category ? params.category.split(',') : null;
+    params.category = params.category ? params.category : null;
     const created = await this.ArticlesModel.addOne(params);
 
     return created;
@@ -60,7 +60,7 @@ class ArticlesService extends Service {
    */
   async update(params) {
     params.tags = params.tags ? params.tags.split(',') : null;
-    params.category = params.category ? params.category.split(',') : null;
+    params.category = params.category ? params.category : null;
     const data = await this.ArticlesModel.updateOneById(params);
     const update = data
       ? _.pickBy(data.toJSON(), (value, key) => {

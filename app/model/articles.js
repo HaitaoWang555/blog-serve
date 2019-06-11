@@ -13,9 +13,9 @@ module.exports = app => {
     id: { type: UUID, primaryKey: true },
     title: { type: STRING(64), allowNull: false },
     content: { type: TEXT, allowNull: false },
-    tags: { type: ARRAY(app.Sequelize.STRING) },
+    tags: { type: ARRAY(app.Sequelize.STRING(64)) },
     category: { type: STRING(64) },
-    status: { type: STRING, allowNull: false },
+    status: { type: STRING(64), allowNull: false },
     allow_comment: { type: BOOLEAN, allowNull: false, defaultValue: true },
   });
   articles.sync()
