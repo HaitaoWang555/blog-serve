@@ -7,7 +7,6 @@ module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
 
-  require('./router/test')(app);
   require('./router/backend/user')(app);
   require('./router/backend/metas')(app);
   require('./router/portal/metas')(app);
