@@ -21,7 +21,7 @@ class ArticlesController extends Controller {
   async list() {
     const { ctx } = this;
     const { query } = ctx;
-    const list = await this.ArticlesService.list(query);
+    const list = await this.ArticlesService.list(null, query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }

@@ -32,7 +32,7 @@ module.exports = app => {
     sequelizeQuery.where = {};
 
     if (type !== 'portal') sequelizeQuery.attributes = { exclude: [ 'content' ] };
-    sequelizeQuery.order = [sortBy.split(',')];
+    sequelizeQuery.order = [ sortBy.split(',') ];
     sequelizeQuery.limit = Number(pagesize || 15);
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
 

@@ -20,7 +20,10 @@ class ArticlesController extends Controller {
   async list() {
     const { ctx } = this;
     const { page = 1, pageSize = 10 } = ctx.request.body;
-    const list = await this.ArticlesService.list(page, pageSize);
+    const query = {
+      page, pageSize,
+    };
+    const list = await this.ArticlesService.list('portal', query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }

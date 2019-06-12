@@ -16,16 +16,15 @@ class ArticlesService extends Service {
   }
 
   /**
-   * 获取列表数据
-   * @param {Number} query.page 默认第一页
-   * @param {Number} query.pageSize 默认15条
-   * @return {Object} 列表
+   *
+   * @param {*} type 前台portal/后台backend
+   * @param {*} query page pageSize
    */
-  async list(query) {
-    const { count, rows } = await this.ArticlesModel.list('portal', query);
+  async list(type, query) {
+    const { count, rows } = await this.ArticlesModel.list(type, query);
     const list = rows.map(row => {
       const item = row && row.toJSON();
-      item.content = this.getSummary(item.content);
+      if (!item.content) item.content = this.getSummary(item.content);
       return item;
     });
 
@@ -86,13 +85,11 @@ class ArticlesService extends Service {
     return await this.ArticlesModel.removeOneById(id);
   }
   /**
-   * 获取文章预览
-   *
-   * @return 截取的预览字符串
-   */
+ * 截取预览内容
+ * @param {*} content 文章内容
+ */
   getSummary(content) {
-    if (!content) return null;
-    return content; // TODO
+    return content;
   }
 }
 
