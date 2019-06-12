@@ -78,11 +78,7 @@ class MetasService extends Service {
 
     const data = await this.MetasModel.updateOneById(params);
 
-    const update = data
-      ? _.pickBy(data.toJSON(), (value, key) => {
-        return [ 'id', 'name', 'type', 'textColor', 'color' ].find(item => key === item);
-      })
-      : null;
+    const update = data ? data.toJSON() : null
 
     return update;
   }

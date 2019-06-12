@@ -27,13 +27,12 @@ module.exports = app => {
     });
 
   articles.list = async (type, query) => {
-    const { pagesize, page, sortBy = 'desc', title, status, tags, category } = query;
-
+    const { pagesize, page, sortBy = 'updated_at,desc', title, status, tags, category } = query;
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
 
     if (type !== 'portal') sequelizeQuery.attributes = { exclude: [ 'content' ] };
-    sequelizeQuery.order = [[ 'updated_at', sortBy ]];
+    sequelizeQuery.order = [sortBy.split(',')];
     sequelizeQuery.limit = Number(pagesize || 15);
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
 

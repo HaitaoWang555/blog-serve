@@ -26,12 +26,12 @@ module.exports = app => {
     });
 
   metas.list = async query => {
-    const { pagesize, page, type, name, sortBy = 'desc' } = query;
+    const { pagesize, page, type, name, sortBy = 'updated_at,desc', } = query;
 
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
 
-    sequelizeQuery.order = [[ 'updated_at', sortBy ]];
+    sequelizeQuery.order = [sortBy.split(',')];
     sequelizeQuery.limit = Number(pagesize || 15);
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
     if (type) sequelizeQuery.where.type = type;
