@@ -1,8 +1,6 @@
 'use strict';
 /* eslint valid-jsdoc: "off" */
 
-const _ = require('lodash');
-
 const Service = require('egg').Service;
 
 class MetasService extends Service {
@@ -18,9 +16,7 @@ class MetasService extends Service {
 
   /**
    * 获取分类或标签
-   * @param {Object} query.type TAG or CATEGORY
-   * @param {Object} query.pagesize
-   * @param {Object} query.page
+   * @param {*} query 查询条件
    */
   async list(query) {
 
@@ -33,11 +29,10 @@ class MetasService extends Service {
     };
     return data;
   }
+
   /**
    * 获取分类或标签 及文章
-   * @param {Object} query.type TAG or CATEGORY
-   * @param {Object} query.pagesize
-   * @param {Object} query.page
+   * @param {*} type tag or category
    */
   async listWithArticles(type) {
 
@@ -76,7 +71,7 @@ class MetasService extends Service {
 
     const data = await this.MetasModel.updateOneById(params);
 
-    const update = data ? data.toJSON() : null
+    const update = data ? data.toJSON() : null;
 
     return update;
   }
