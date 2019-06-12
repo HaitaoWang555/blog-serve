@@ -3,6 +3,7 @@
 const { Service } = require('egg');
 
 const _ = require('lodash');
+const { MAX_PREVIEW_COUNT } = require('../common/public');
 
 class ArticlesService extends Service {
 /**
@@ -24,7 +25,7 @@ class ArticlesService extends Service {
     const { count, rows } = await this.ArticlesModel.list(type, query);
     const list = rows.map(row => {
       const item = row && row.toJSON();
-      if (!item.content) item.content = this.getSummary(item.content);
+      if (item.content) item.content = this.getSummary(item.content);
       return item;
     });
 
@@ -89,6 +90,10 @@ class ArticlesService extends Service {
  * @param {*} content 文章内容
  */
   getSummary(content) {
+    const maxLength = MAX_PREVIEW_COUNT;
+    const index = content.slice(0, maxLength).lastIndexOf('</p>');
+    const len = index > -1 ? index : maxLength;
+    content = content.slice(0, len).concat('......</p>');
     return content;
   }
 }
