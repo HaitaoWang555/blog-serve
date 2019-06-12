@@ -1,6 +1,7 @@
 
 'use strict';
 const Controller = require('egg').Controller;
+const uuid = require('uuid/v4');
 
 class ArticlesController extends Controller {
   /**
@@ -58,7 +59,9 @@ class ArticlesController extends Controller {
       ctx.body = response;
       return null;
     }
-
+    params.id = uuid();
+    params.tags = params.tags ? params.tags.split(',') : null;
+    params.category = params.category ? params.category : null;
     const created = await this.ArticlesService.addOne(params);
 
     const response = created
@@ -73,6 +76,9 @@ class ArticlesController extends Controller {
   async update() {
     const { ctx } = this;
     const params = ctx.request.body;
+    // TODO: 校验参数
+    params.tags = params.tags ? params.tags.split(',') : null;
+    params.category = params.category ? params.category : null;
     const update = await this.ArticlesService.update(params);
     const response = update
       ? this.ServerResponse.createBySuccessMsgAndData('修改成功', update)

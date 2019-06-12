@@ -1,6 +1,7 @@
 
 'use strict';
 const Controller = require('egg').Controller;
+const uuid = require('uuid/v4');
 
 class MetasController extends Controller {
   /**
@@ -41,6 +42,7 @@ class MetasController extends Controller {
       ctx.body = response;
       return null;
     }
+    params.id = uuid();
 
     const created = await this.MetasService.addOne(params);
 

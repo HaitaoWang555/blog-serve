@@ -2,7 +2,6 @@
 /* eslint valid-jsdoc: "off" */
 const { Service } = require('egg');
 
-const uuid = require('uuid/v4');
 const _ = require('lodash');
 
 class ArticlesService extends Service {
@@ -45,9 +44,6 @@ class ArticlesService extends Service {
    */
   async addOne(params) {
 
-    params.id = uuid();
-    params.tags = params.tags ? params.tags.split(',') : null;
-    params.category = params.category ? params.category : null;
     const created = await this.ArticlesModel.addOne(params);
 
     return created;
@@ -59,8 +55,7 @@ class ArticlesService extends Service {
    * @return {Object} 成功或失败信息 添加的信息
    */
   async update(params) {
-    params.tags = params.tags ? params.tags.split(',') : null;
-    params.category = params.category ? params.category : null;
+
     const data = await this.ArticlesModel.updateOneById(params);
     const update = data
       ? _.pickBy(data.toJSON(), (value, key) => {

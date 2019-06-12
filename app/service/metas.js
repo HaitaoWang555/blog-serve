@@ -1,7 +1,6 @@
 'use strict';
 /* eslint valid-jsdoc: "off" */
 
-const uuid = require('uuid/v4');
 const _ = require('lodash');
 
 const Service = require('egg').Service;
@@ -63,7 +62,6 @@ class MetasService extends Service {
    */
   async addOne(params) {
 
-    params.id = uuid();
     const created = await this.MetasModel.addOne(params);
 
     return created;
