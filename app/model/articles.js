@@ -5,6 +5,9 @@
 /**
  * @param {Egg.Application} app - egg application
  */
+
+const { PAGE_SIZE } = require('../common/public');
+
 module.exports = app => {
 
   const { UUID, STRING, BOOLEAN, TEXT, ARRAY, Op } = app.Sequelize;
@@ -33,8 +36,8 @@ module.exports = app => {
 
     if (type !== 'portal') sequelizeQuery.attributes = { exclude: [ 'content' ] };
     sequelizeQuery.order = [ sortBy.split(',') ];
-    sequelizeQuery.limit = Number(pagesize || 15);
-    sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
+    sequelizeQuery.limit = Number(pagesize || PAGE_SIZE);
+    sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || PAGE_SIZE);
 
     if (title) sequelizeQuery.where.title = { [Op.like]: `%${title}%` };
     if (status) sequelizeQuery.where.status = status;

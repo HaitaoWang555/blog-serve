@@ -8,7 +8,6 @@ class ArticlesController extends Controller {
   */
   constructor(ctx) {
     super(ctx);
-    this.resquest = ctx.request;
     this.ArticlesService = ctx.service.articles;
     this.ResponseCode = ctx.response.ResponseCode;
     this.ServerResponse = ctx.response.ServerResponse;
@@ -19,9 +18,9 @@ class ArticlesController extends Controller {
    */
   async list() {
     const { ctx } = this;
-    const { page = 1, pageSize = 10 } = ctx.request.body;
+    const { page, pagesize } = ctx.query;
     const query = {
-      page, pageSize,
+      page, pagesize,
     };
     const list = await this.ArticlesService.list('portal', query);
     const response = this.ServerResponse.createBySuccessData(list);

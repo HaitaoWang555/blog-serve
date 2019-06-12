@@ -6,6 +6,8 @@
  * @param {Egg.Application} app - egg application
  */
 
+const { PAGE_SIZE } = require('../common/public');
+
 module.exports = app => {
 
   const { UUID, STRING, Op } = app.Sequelize;
@@ -26,14 +28,18 @@ module.exports = app => {
     });
 
   metas.list = async query => {
-    const { pagesize, page, type, name, sortBy = 'updated_at,desc' } = query;
+    const { pagesize, page, type, name, sortBy = 'updated_at,desc', list } = query;
 
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
 
     sequelizeQuery.order = [ sortBy.split(',') ];
-    sequelizeQuery.limit = Number(pagesize || 15);
-    sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || 15);
+
+    if (list !== 'all') {
+      sequelizeQuery.limit = Number(pagesize || PAGE_SIZE);
+      sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || PAGE_SIZE);
+    }
+
     if (type) sequelizeQuery.where.type = type;
     if (name) sequelizeQuery.where.name = { [Op.like]: `%${name}%` };
 
