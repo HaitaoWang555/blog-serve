@@ -26,6 +26,16 @@ class ArticlesController extends Controller {
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }
+  /**
+   * 获取归档列表
+   */
+  async archive() {
+    const { ctx } = this;
+    const list = await this.ArticlesService.archive();
+    // console.log(list);
+    const response = this.ServerResponse.createBySuccessData(list);
+    ctx.body = response;
+  }
 
   /**
    * 获取某一篇文章

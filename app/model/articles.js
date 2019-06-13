@@ -48,11 +48,33 @@ module.exports = app => {
   };
 
   articles.getAllWithType = async (type, name) => {
+    const sequelizeQuery = {};
+    sequelizeQuery.where = {};
+    sequelizeQuery.where.status = 'publish';
+    sequelizeQuery.attributes = { exclude: [ 'content', 'updated_at', 'created_at', 'allow_comment' ] };
+    switch (type) {
+      case 'tag':
+        sequelizeQuery.where.tags = { [Op.contains]: name.split(',') };
+        sequelizeQuery.attributes.exclude.push('category');
+        break;
+      case 'category':
+        sequelizeQuery.where.category = { [Op.like]: `%${name}%` };
+        sequelizeQuery.attributes.exclude.push('tags');
+        break;
+      default:
+        break;
+    }
     return await articles
-      .findAll({
-        where: { [type]: { [Op.like]: `%${name}%` } }, // TODO
-        attributes: { exclude: [ 'content' ] },
-      });
+      .findAll(sequelizeQuery);
+  };
+
+  articles.archive = async () => {
+    const sequelizeQuery = {};
+    sequelizeQuery.where = {};
+    sequelizeQuery.where.status = 'publish';
+    sequelizeQuery.attributes = { exclude: [ 'content', 'allow_comment', 'tags', 'category' ] };
+    return await articles
+      .findAll(sequelizeQuery);
   };
 
   articles.addOne = async toCreate => {

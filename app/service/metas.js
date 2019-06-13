@@ -36,15 +36,15 @@ class MetasService extends Service {
    */
   async listWithArticles(type) {
 
-    let list = await this.MetasModel.list(type);
-    list = list.map(row => row && row.toJSON());
+    const data = await this.MetasModel.list(type);
+    const list = data.rows.map(row => row && row.toJSON());
     console.time();
     const listWithArticles = await Promise.all(list.map(async item => {
       const type = item.type;
-      let arttcles = await this.Articles.getAllWithType(type, item.name);
-      arttcles = arttcles.map(row => row && row.toJSON());
+      let articles = await this.Articles.getAllWithType(type, item.name);
+      articles = articles.map(row => row && row.toJSON());
 
-      return { ...item, arttcles };
+      return { ...item, articles };
     }));
     console.timeEnd();
     return listWithArticles;

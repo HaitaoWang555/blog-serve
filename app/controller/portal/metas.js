@@ -19,8 +19,9 @@ class MetasController extends Controller {
    */
   async categoryList() {
     const { ctx } = this;
-    const type = 'CATEGORY';
-    const list = await this.MetasService.list(type);
+    const query = {};
+    query.type = 'category';
+    const list = await this.MetasService.listWithArticles(query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }
@@ -29,8 +30,9 @@ class MetasController extends Controller {
    */
   async tagList() {
     const { ctx } = this;
-    const type = 'TAG';
-    const list = await this.MetasService.list(type);
+    const query = {};
+    query.type = 'tag';
+    const list = await this.MetasService.listWithArticles(query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }

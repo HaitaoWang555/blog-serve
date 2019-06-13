@@ -36,6 +36,33 @@ class ArticlesService extends Service {
 
     return data;
   }
+  /**
+   * 获取归档列表
+   */
+  async archive() {
+    const rows = await this.ArticlesModel.archive();
+    const data = [];
+    const yearData = [];
+    const list = rows.map(row => {
+      const item = row && row.toJSON();
+      const dateStr = item.updated_at.getFullYear();
+      if (!yearData.includes(dateStr)) {
+        yearData.push(dateStr);
+        const obj = {};
+        obj.dateStr = dateStr;
+        obj.articles = [];
+        data.push(obj);
+      }
+      return item;
+    });
+    data.forEach(item => {
+      list.forEach(i => {
+        if (item.dateStr === i.updated_at.getFullYear()) item.articles.push(i);
+      });
+    });
+    // console.log(data);
+    return data;
+  }
 
   /**
    * 新增文章
