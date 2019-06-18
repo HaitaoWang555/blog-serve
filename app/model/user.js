@@ -20,6 +20,11 @@ async function genEncryptedPassword(rawPassword, salt) {
   };
 }
 
+function getIcon(username) {
+  const iconUrl = 'https://avatar.lisk.ws/';
+  return iconUrl + username;
+}
+
 module.exports = app => {
 
   const { Sequelize } = app;
@@ -75,13 +80,16 @@ module.exports = app => {
     });
 
   user.createUserWithUnPw = async (username, password) => {
+
     const { salt, encrypted } = await genEncryptedPassword(password);
+    const iconUrl = getIcon(username);
     let created = await user.create({
       id: uuid(),
       username,
       role: ROLE_ADMAIN, // TODO: 正式删除
       password: encrypted,
       salt,
+      icon: iconUrl,
     }, {
       raw: true,
     });
