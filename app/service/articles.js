@@ -45,7 +45,7 @@ class ArticlesService extends Service {
     const yearData = [];
     const list = rows.map(row => {
       const item = row && row.toJSON();
-      const dateStr = item.updated_at.getFullYear();
+      const dateStr = item.updated_at.getFullYear() + '-' + (Number(item.updated_at.getMonth()) + 1);
       if (!yearData.includes(dateStr)) {
         yearData.push(dateStr);
         const obj = {};
@@ -57,7 +57,8 @@ class ArticlesService extends Service {
     });
     data.forEach(item => {
       list.forEach(i => {
-        if (item.dateStr === i.updated_at.getFullYear()) item.articles.push(i);
+        const dateStr = i.updated_at.getFullYear() + '-' + (Number(i.updated_at.getMonth()) + 1);
+        if (item.dateStr === dateStr) item.articles.push(i);
       });
     });
     // console.log(data);
@@ -100,7 +101,13 @@ class ArticlesService extends Service {
   async getOneById(id) {
 
     const list = await this.ArticlesModel.getOneById(id);
-
+    if (list) { // 阅读数+1
+      const params = {};
+      params.id = id;
+      params.hits = list.hits + 1;
+      // TODO: updated_at 更新时间保持不变
+      this.ArticlesModel.updateOneById(params);
+    }
     return list;
   }
   /**

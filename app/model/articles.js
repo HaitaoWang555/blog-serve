@@ -10,7 +10,7 @@ const { PAGE_SIZE } = require('../common/public');
 
 module.exports = app => {
 
-  const { UUID, STRING, BOOLEAN, TEXT, ARRAY, Op } = app.Sequelize;
+  const { UUID, STRING, BOOLEAN, TEXT, INTEGER, ARRAY, Op } = app.Sequelize;
 
   const articles = app.model.define('articles', {
     id: { type: UUID, primaryKey: true },
@@ -19,6 +19,7 @@ module.exports = app => {
     tags: { type: ARRAY(app.Sequelize.STRING(64)) },
     category: { type: STRING(64) },
     status: { type: STRING(64), allowNull: false },
+    hits: { type: INTEGER, default: 0 },
     allow_comment: { type: BOOLEAN, allowNull: false, defaultValue: true },
   });
   articles.sync()
