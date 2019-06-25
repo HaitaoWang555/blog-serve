@@ -45,7 +45,7 @@ class ArticlesService extends Service {
     const yearData = [];
     const list = rows.map(row => {
       const item = row && row.toJSON();
-      const dateStr = item.updated_at.getFullYear() + '-' + (Number(item.updated_at.getMonth()) + 1);
+      const dateStr = item.update_content_time.slice(0, 7);
       if (!yearData.includes(dateStr)) {
         yearData.push(dateStr);
         const obj = {};
@@ -57,11 +57,10 @@ class ArticlesService extends Service {
     });
     data.forEach(item => {
       list.forEach(i => {
-        const dateStr = i.updated_at.getFullYear() + '-' + (Number(i.updated_at.getMonth()) + 1);
+        const dateStr = i.update_content_time.slice(0, 7);
         if (item.dateStr === dateStr) item.articles.push(i);
       });
     });
-    // console.log(data);
     return data;
   }
 

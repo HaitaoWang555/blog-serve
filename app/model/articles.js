@@ -10,7 +10,7 @@ const { PAGE_SIZE } = require('../common/public');
 
 module.exports = app => {
 
-  const { UUID, STRING, BOOLEAN, TEXT, INTEGER, ARRAY, Op } = app.Sequelize;
+  const { UUID, STRING, BOOLEAN, TEXT, INTEGER, ARRAY, DATE, Op } = app.Sequelize;
 
   const articles = app.model.define('articles', {
     id: { type: UUID, primaryKey: true },
@@ -21,6 +21,7 @@ module.exports = app => {
     status: { type: STRING(64), allowNull: false },
     hits: { type: INTEGER, default: 0 },
     allow_comment: { type: BOOLEAN, allowNull: false, defaultValue: true },
+    update_content_time: { type: DATE, allowNull: false, defaultValue: new Date() },
   });
   articles.sync()
     .catch(e => {
@@ -31,7 +32,7 @@ module.exports = app => {
     });
 
   articles.list = async (type, query) => {
-    const { pagesize, page, sortBy = 'updated_at,desc', title, status, tags, category } = query;
+    const { pagesize, page, sortBy = 'update_content_time,desc', title, status, tags, category } = query;
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
 
@@ -52,7 +53,7 @@ module.exports = app => {
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
     sequelizeQuery.where.status = 'publish';
-    sequelizeQuery.attributes = { exclude: [ 'content', 'updated_at', 'created_at', 'allow_comment' ] };
+    sequelizeQuery.attributes = { exclude: [ 'content', 'update_content_time', 'updated_at', 'created_at', 'allow_comment' ] };
     switch (type) {
       case 'tag':
         sequelizeQuery.where.tags = { [Op.contains]: name.split(',') };
@@ -71,14 +72,17 @@ module.exports = app => {
 
   articles.archive = async () => {
     const sequelizeQuery = {};
+    const sortBy = 'update_content_time,desc';
     sequelizeQuery.where = {};
     sequelizeQuery.where.status = 'publish';
+    sequelizeQuery.order = [ sortBy.split(',') ];
     sequelizeQuery.attributes = { exclude: [ 'content', 'allow_comment', 'tags', 'category' ] };
     return await articles
       .findAll(sequelizeQuery);
   };
 
   articles.addOne = async toCreate => {
+    toCreate.update_content_time = new Date();
     return await articles
       .create(toCreate)
       .catch(e => {
@@ -86,7 +90,7 @@ module.exports = app => {
       });
   };
   articles.updateOneById = async toUpdate => {
-
+    toUpdate.update_content_time = new Date();
     const [ updateCount, [ updateRow ]] = await articles.update(toUpdate, {
       where: { id: toUpdate.id },
       individualHooks: true,
