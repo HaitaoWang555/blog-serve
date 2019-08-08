@@ -9,6 +9,7 @@ module.exports = app => {
 
   require('./router/backend/user')(app);
   require('./router/portal/user')(app);
+  require('./router/portal/comment')(app);
   require('./router/backend/metas')(app);
   require('./router/portal/metas')(app);
   require('./router/backend/articles')(app);
