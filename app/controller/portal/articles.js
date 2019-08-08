@@ -32,7 +32,6 @@ class ArticlesController extends Controller {
   async archive() {
     const { ctx } = this;
     const list = await this.ArticlesService.archive();
-    // console.log(list);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;
   }

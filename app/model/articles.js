@@ -90,7 +90,7 @@ module.exports = app => {
       });
   };
   articles.updateOneById = async toUpdate => {
-    toUpdate.update_content_time = new Date();
+    if (toUpdate.isUpdateContent) toUpdate.update_content_time = new Date(); // 更新文章内容
     const [ updateCount, [ updateRow ]] = await articles.update(toUpdate, {
       where: { id: toUpdate.id },
       individualHooks: true,

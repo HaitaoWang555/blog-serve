@@ -104,7 +104,6 @@ class ArticlesService extends Service {
       const params = {};
       params.id = id;
       params.hits = list.hits + 1;
-      // TODO: updated_at 更新时间保持不变
       this.ArticlesModel.updateOneById(params);
     }
     return list;
