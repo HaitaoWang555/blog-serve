@@ -32,7 +32,7 @@ module.exports = app => {
     });
 
   comment.list = async query => {
-    const { pagesize, page, sortBy = 'created_at,asc', parent_id, article_id } = query;
+    const { pagesize, page, sortBy = 'created_at,asc', p_id, id } = query;
 
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
@@ -46,9 +46,9 @@ module.exports = app => {
     sequelizeQuery.limit = Number(pagesize || PAGE_SIZE);
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || PAGE_SIZE);
 
-    sequelizeQuery.where.article_id = article_id;
-    if (parent_id) {
-      sequelizeQuery.where.parent_id = parent_id;
+    sequelizeQuery.where.article_id = id;
+    if (p_id) {
+      sequelizeQuery.where.parent_id = p_id;
     } else {
       sequelizeQuery.where.parent_id = null;
     }

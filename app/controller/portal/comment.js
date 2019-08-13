@@ -20,10 +20,8 @@ class CommentController extends Controller {
    */
   async commentList() {
     const { ctx } = this;
-    const { id, p_id } = ctx.query;
-    const query = {};
-    query.article_id = id;
-    query.parent_id = p_id;
+    const query = ctx.query;
+
     const list = await this.CommentService.listWithUser(query);
     const response = this.ServerResponse.createBySuccessData(list);
     ctx.body = response;

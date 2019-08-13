@@ -21,8 +21,8 @@ class CommentService extends Service {
    */
   async listWithUser(params) {
 
-    const data = await this.CommentModel.list(params);
-    const list = data.rows.map(row => row && row.toJSON());
+    const { count, rows } = await this.CommentModel.list(params);
+    const list = rows.map(row => row && row.toJSON());
     console.time();
     const select = [];
     select.push('username', 'icon');
@@ -38,7 +38,11 @@ class CommentService extends Service {
       return { ...item, userInfo, replyUserInfo };
     }));
     console.timeEnd();
-    return listWithUser;
+    const data = {
+      items: listWithUser,
+      total: count,
+    };
+    return data;
   }
 
   /**
