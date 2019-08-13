@@ -29,8 +29,13 @@ class CommentService extends Service {
     const listWithUser = await Promise.all(list.map(async item => {
       const user_id = item.user_id;
       const userInfo = await this.UserModel.getUser(user_id, select);
+      let replyUserInfo = {};
+      if (item.reply_user_id) {
+        const user_id = item.reply_user_id;
+        replyUserInfo = await this.UserModel.getUser(user_id, select);
+      }
 
-      return { ...item, userInfo };
+      return { ...item, userInfo, replyUserInfo };
     }));
     console.timeEnd();
     return listWithUser;
@@ -42,10 +47,15 @@ class CommentService extends Service {
    * @return {Object} 成功或失败信息 添加的信息
    */
   async addOne(params) {
-
     const created = await this.CommentModel.addOne(params);
-
-    return created;
+    let update = true;
+    if (created && params.parent_id) {
+      const obj = {};
+      obj.is_have_leaf = true;
+      obj.id = params.parent_id;
+      update = await this.update(obj);
+    }
+    return update ? created : null;
   }
 
   /**

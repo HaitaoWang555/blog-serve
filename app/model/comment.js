@@ -10,16 +10,17 @@ const { PAGE_SIZE } = require('../common/public');
 
 module.exports = app => {
 
-  const { UUID, STRING, INTEGER } = app.Sequelize;
+  const { UUID, STRING, INTEGER, BOOLEAN } = app.Sequelize;
 
   const comment = app.model.define('comment', {
     id: { type: UUID, primaryKey: true },
     user_id: { type: UUID, allowNull: false },
     article_id: { type: UUID, allowNull: false },
+    parent_id: { type: UUID },
     reply_user_id: { type: UUID },
     up: { type: INTEGER }, // 赞同
     down: { type: INTEGER }, // 反对
-    level: { type: INTEGER, allowNull: false, defaultValue: 0 },
+    is_have_leaf: { type: BOOLEAN, allowNull: false, defaultValue: false },
     content: { type: STRING(1000), allowNull: false },
   });
   comment.sync()
@@ -31,7 +32,7 @@ module.exports = app => {
     });
 
   comment.list = async query => {
-    const { pagesize, page, sortBy = 'updated_at,desc', p_id, article_id } = query;
+    const { pagesize, page, sortBy = 'created_at,asc', parent_id, article_id } = query;
 
     const sequelizeQuery = {};
     sequelizeQuery.where = {};
@@ -46,8 +47,10 @@ module.exports = app => {
     sequelizeQuery.offset = Number(page - 1 || 0) * Number(pagesize || PAGE_SIZE);
 
     sequelizeQuery.where.article_id = article_id;
-    if (p_id) {
-      sequelizeQuery.where.reply_user_id = p_id;
+    if (parent_id) {
+      sequelizeQuery.where.parent_id = parent_id;
+    } else {
+      sequelizeQuery.where.parent_id = null;
     }
 
     return await comment
