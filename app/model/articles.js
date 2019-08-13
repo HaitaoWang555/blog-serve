@@ -20,6 +20,7 @@ module.exports = app => {
     category: { type: STRING(64) },
     status: { type: STRING(64), allowNull: false },
     hits: { type: INTEGER, default: 0 },
+    comment_count: { type: INTEGER },
     allow_comment: { type: BOOLEAN, allowNull: false, defaultValue: true },
     update_content_time: { type: DATE, allowNull: false, defaultValue: new Date() },
   });

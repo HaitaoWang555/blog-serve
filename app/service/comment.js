@@ -11,6 +11,7 @@ class CommentService extends Service {
     super(ctx);
     this.CommentModel = ctx.model.Comment;
     this.UserModel = ctx.model.User;
+    this.ArticlesService = ctx.service.articles;
     this.ServerResponse = ctx.response.ServerResponse;
   }
 
@@ -58,6 +59,9 @@ class CommentService extends Service {
       obj.is_have_leaf = true;
       obj.id = params.parent_id;
       update = await this.update(obj);
+    }
+    if (created) { // 更新文章评论数
+      this.ArticlesService.updateOneCommentCountById(params.article_id);
     }
     return update ? created : null;
   }

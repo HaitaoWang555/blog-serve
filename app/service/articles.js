@@ -128,6 +128,19 @@ class ArticlesService extends Service {
     content = content.slice(0, len).concat('......</p>');
     return content;
   }
+  /**
+   * 更新文章评论数量
+   * @param {String} id 文章id
+   */
+  async updateOneCommentCountById(id) {
+    const article = await this.ArticlesModel.getOneById(id);
+    if (article) {
+      const params = {};
+      params.id = id;
+      params.comment_count = article.comment_count + 1;
+      this.ArticlesModel.updateOneById(params);
+    }
+  }
 }
 
 module.exports = ArticlesService;
