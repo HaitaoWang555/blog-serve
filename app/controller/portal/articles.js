@@ -42,7 +42,7 @@ class ArticlesController extends Controller {
   async getOne() {
     const { ctx } = this;
     const { id } = ctx.query;
-    const list = await this.ArticlesService.getOneById(id);
+    const list = await this.ArticlesService.getOneById(id, 'portal');
     const response = list
       ? this.ServerResponse.createBySuccessData(list)
       : this.ServerResponse.createByErrorMsg('已删除或不存在');

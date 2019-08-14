@@ -12,6 +12,7 @@ class ArticlesService extends Service {
   constructor(ctx) {
     super(ctx);
     this.ArticlesModel = ctx.model.Articles;
+    this.MetasModel = ctx.model.Metas;
     this.ResponseCode = ctx.response.ResponseCode;
     this.ServerResponse = ctx.response.ServerResponse;
   }
@@ -23,11 +24,14 @@ class ArticlesService extends Service {
    */
   async list(type, query) {
     const { count, rows } = await this.ArticlesModel.list(type, query);
-    const list = rows.map(row => {
-      const item = row && row.toJSON();
+
+    const list = await Promise.all(rows.map(async item => {
       if (item.content) item.content = this.getSummary(item.content);
-      return item;
-    });
+
+      const newItem = this.initMetas(item);
+
+      return newItem;
+    }));
 
     const data = {
       items: list,
@@ -95,18 +99,20 @@ class ArticlesService extends Service {
   /**
    * 根据id获取列表中某一个
    * @param {uuid} id ID
+   * @param {String} type portal 前台
    * @return {Object} 成功或失败信息 信息
    */
-  async getOneById(id) {
+  async getOneById(id, type) {
 
     const list = await this.ArticlesModel.getOneById(id);
-    if (list) { // 阅读数+1
+    if (list && type === 'portal') { // 阅读数+1
       const params = {};
       params.id = id;
       params.hits = list.hits + 1;
       this.ArticlesModel.updateOneById(params);
     }
-    return list;
+    const newList = this.initMetas(list);
+    return newList;
   }
   /**
    * 根据id删除列表中某一个
@@ -122,10 +128,14 @@ class ArticlesService extends Service {
  * @param {*} content 文章内容
  */
   getSummary(content) {
+    const length = content.length;
     const maxLength = MAX_PREVIEW_COUNT;
-    const index = content.slice(0, maxLength).lastIndexOf('</p>');
-    const len = index > -1 ? index : maxLength;
-    content = content.slice(0, len).concat('......</p>');
+
+    if (length > maxLength) {
+      const index = content.slice(0, maxLength).lastIndexOf('</p>');
+      const len = index > -1 ? index : maxLength;
+      content = content.slice(0, len).concat('......</p>');
+    }
     return content;
   }
   /**
@@ -140,6 +150,25 @@ class ArticlesService extends Service {
       params.comment_count = article.comment_count + 1;
       this.ArticlesModel.updateOneById(params);
     }
+  }
+  /**
+   * 获取标签 分类名称
+   * @param {Object} item 文章信息
+   */
+  async initMetas(item) {
+    if (item.category) {
+      const category = await this.MetasModel.getOneById(item.category);
+      if (category) item.category = category.name;
+    }
+
+    if (item.tags && item.tags.length > 0) {
+      const newTags = await Promise.all(item.tags.map(async i => {
+        const tags = await this.MetasModel.getOneById(i);
+        if (tags) return tags.name;
+      }));
+      item.tags = newTags;
+    }
+    return item;
   }
 }
 

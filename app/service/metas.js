@@ -41,7 +41,7 @@ class MetasService extends Service {
     console.time();
     const listWithArticles = await Promise.all(list.map(async item => {
       const type = item.type;
-      let articles = await this.Articles.getAllWithType(type, item.name);
+      let articles = await this.Articles.getAllWithType(type, item.id);
       articles = articles.map(row => row && row.toJSON());
 
       return { ...item, articles };
